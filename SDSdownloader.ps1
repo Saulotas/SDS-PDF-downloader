@@ -18,9 +18,8 @@ $workpath = $sourcepath +'\PDF\'
 
 foreach  ($line in  [System.IO.File]::ReadLines($sourcefile)| Where-Object { $_.Trim() -ne ''})
 {
-            $filename = $line.Substring($line.LastIndexOf('=')+1)+'.pdf'
-            $filename = $workpath+$filename
-			[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
+            $filename = $workpath+$line.Substring($line.LastIndexOf('=')+1)+'.pdf'
+            [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
             #Invoke-WebRequest 
             Invoke-RestMethod $line -OutFile $filename
 }
