@@ -20,19 +20,20 @@ $workpath = $sourcepath +'\PDF\'
 
 foreach  ($line in  [System.IO.File]::ReadLines($sourcefile)| Where-Object { $_.Trim() -ne ''})
 {
-    if ($line -contains ("https"))
+    if ($line -match "destination")
         {
-            $filename = $workpath+$line.Substring($line.LastIndexOf('=')+1)+'.pdf'
+            $filename = $workpath+$line.Substring($line.LastIndexOf('%')+3)+'.pdf'
             [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
             #Invoke-WebRequest 
             Invoke-RestMethod $line -OutFile $filename
+            
         }
     else
         {
-            $filename = $workpath+$line.Substring($line.LastIndexOf('%3D')+3)+'.pdf'
-            [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
-            #Invoke-WebRequest 
-            Invoke-RestMethod $line -OutFile $filename
+        $filename = $workpath+$line.Substring($line.LastIndexOf('=')+1)+'.pdf'
+        [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
+        #Invoke-WebRequest 
+        Invoke-RestMethod $line -OutFile $filename
         }
 }
 
